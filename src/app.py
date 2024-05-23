@@ -36,14 +36,43 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+# Rutas para obtener usuarios 
+
 @app.route('/user', methods=['GET'])
 def handle_hello():
+    all_users = User.query.all()
+    users_serialized = []
+    for user in all_users:
+        users_serialized.append(user.serialize())
+    print(users_serialized)
+    return jsonify({"data": "all_user"}), 200
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+@app.route("/user/<int:id>", methods=['GET'])
+def get_single_user(id):
+    single_user = User.query.get(id)
+    if single_user is None:
+        return jsonify({"msg": "El usuario con el ID: {} no existe".format(id)}), 400
+    return jsonify({"data": single_user.serialize()}), 200
 
-    return jsonify(response_body), 200
+# Rutas para crear usuarios
+
+@app.route('/user', methods=["POST"])
+def new_user():
+    body = request.get_json(silent=True)
+    if body is None:
+        return jsonify({"msg": "Debes enviar informacion en el body"}), 400
+    if "email" not in body:
+        return jsonify({"msg": "El campo email es obligatorio"}), 400
+    if "password" not in body:
+        return jsonify({"msg": "El campo password es obligatorio"}), 400
+    
+    new_user = User()
+    new_user.email = body["email"]
+    new_user.password = body["password"]
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"msg": "OK"}), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
