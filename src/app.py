@@ -74,6 +74,18 @@ def new_user():
 
     return jsonify({"msg": "OK"}), 200
 
+@app.route("/user/<int:id>", methods=["DELETE"])
+def delete_user(id):
+    delete_user = User.query.get(id)
+    db.session.delete(delete_user)
+    db.session.commit()
+    return jsonify({"msg": "OK"}), 200
+
+#try: 
+    db.session.rollback
+#Exception
+
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))

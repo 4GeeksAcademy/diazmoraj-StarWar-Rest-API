@@ -19,3 +19,20 @@ class User(db.Model):
             "password": self.password
             # do not serialize the password, its a security breach
         }
+    
+class Planet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    climate = db.Column(db.String(15), nullable=False)
+    population = db.Column(db.Integer, nullable=False)
+    gravity = db.Column(db.Integer, nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "is_active": self.is_active,
+            "climate": self.climate,
+            "population": self.population,
+            "gravity": self.gravity
+        }
