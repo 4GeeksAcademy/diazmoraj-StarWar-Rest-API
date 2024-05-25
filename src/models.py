@@ -38,3 +38,71 @@ class Planet(db.Model):
             "population": self.population,
             "gravity": self.gravity
         }
+    
+class People(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    gender = db.Column(db.String(15), nullable=False)
+    height = db.Column(db.Integer, nullable=False)
+    mass = db.Column(db.Integer, nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "gender": self.gender,
+            "height": self.height,
+            "mass": self.mass
+        }
+    
+class Starship(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    model = db.Column(db.String(15), nullable=False)
+    cost = db.Column(db.Integer, nullable=False)
+    pilot = db.Column(db.Integer, nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "model": self.model,
+            "cost": self.cost,
+            "pilot": self.pilot
+        }
+    
+class FavPlanet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    planet_id = db.Column(db.Integer, nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "planet_id": self.planet_id
+        }
+    
+class FavPeople(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    people_id = db.Column(db.Integer, nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "people_id": self.people_id
+        }
+    
+class FavStarship(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    starship_id = db.Column(db.Integer, nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "starship_id": self.starship_id
+        }
