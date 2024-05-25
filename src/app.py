@@ -9,6 +9,7 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
 from models import db, User
+from models import db, Planet
 #from models import Person
 
 app = Flask(__name__)
@@ -76,14 +77,14 @@ def new_user():
 
 @app.route("/user/<int:id>", methods=["DELETE"])
 def delete_user(id):
-    delete_user = User.query.get(id)
-    db.session.delete(delete_user)
-    db.session.commit()
-    return jsonify({"msg": "OK"}), 200
-
-#try: 
-    db.session.rollback
-#Exception
+    try:
+        delete_user = User.query.get(id)
+        db.session.delete(delete_user)
+        db.session.commit()
+        return jsonify({"msg": "OK"}), 204
+    except Exception as error:
+        db.session.rollback()
+        return jsonify({"msg": error.args[0]}), 500
 
 
 # this only runs if `$ python src/app.py` is executed
