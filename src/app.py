@@ -260,7 +260,136 @@ def delete_starship(id):
     except Exception as error:
         db.session.rollback()
         return jsonify({"msg": error.args[0]}), 500
+    
+# Rutas para obtener favoritos de planetas
+@app.route('/favplanet', methods=['GET'])
+def get_all_favplanet():
+    all_favplanet = FavPlanet.query.all()
+    favplanets_serialized = []
+    for favplanet in all_favplanet:
+        favplanets_serialized.append(favplanet.serialize())
+    print(favplanets_serialized)
+    return jsonify({"data": "all_favplanet"}), 200
 
+# Rutas para obtener favoritos de planetas por ID
+@app.route("/favplanet/<int:id>", methods=['GET'])
+def get_single_favlanet(id):
+    single_favplanet = FavPlanet.query.get(id)
+    if single_favplanet is None:
+        return jsonify({"msg": "La Favorito de Planeta con el ID: {} no existe".format(id)}), 400
+    return jsonify({"data": single_favplanet.serialize()}), 200
+
+# Rutas para nuevos favoritos de planetas
+@app.route('/favplanet', methods=["POST"])
+def new_favplanet():
+    body = request.get_json(silent=True)
+      
+    new_favplanet = FavPlanet()
+    new_favplanet.user_id = body["user_id"]
+    new_favplanet.planet_id = body["planet_id"]
+    db.session.add(new_favplanet)
+    db.session.commit()
+
+    return jsonify({"msg": "OK"}), 200
+
+#Rutas para borrar favoritos de planetas
+@app.route("/favplanet/<int:id>", methods=["DELETE"])
+def delete_favplanet(id):
+    try:
+        delete_favplanet = FavPlanet.query.get(id)
+        db.session.delete(delete_favplanet)
+        db.session.commit()
+        return jsonify({"msg": "OK"}), 204
+    except Exception as error:
+        db.session.rollback()
+        return jsonify({"msg": error.args[0]}), 500
+    
+# Rutas para obtener favoritos de personas
+@app.route('/favpeople', methods=['GET'])
+def get_all_favpeople():
+    all_favpeople = FavPeople.query.all()
+    favpeoples_serialized = []
+    for favpeople in all_favpeople:
+        favpeoples_serialized.append(favpeople.serialize())
+    print(favpeoples_serialized)
+    return jsonify({"data": "all_favpeople"}), 200
+
+# Rutas para obtener favoritos de personas por ID
+@app.route("/favpeople/<int:id>", methods=['GET'])
+def get_single_favpeople(id):
+    single_favpeople = FavPeople.query.get(id)
+    if single_favpeople is None:
+        return jsonify({"msg": "La Favorito de Personas con el ID: {} no existe".format(id)}), 400
+    return jsonify({"data": single_favpeople.serialize()}), 200
+
+# Rutas para nuevos favoritos de personas
+@app.route('/favpeole', methods=["POST"])
+def new_favpeople():
+    body = request.get_json(silent=True)
+      
+    new_favpeople = FavPeople()
+    new_favpeople.user_id = body["user_id"]
+    new_favpeople.people_id = body["people_id"]
+    db.session.add(new_favpeople)
+    db.session.commit()
+
+    return jsonify({"msg": "OK"}), 200
+
+#Rutas para borrar favoritos de personas
+@app.route("/favpeople/<int:id>", methods=["DELETE"])
+def delete_favpeople(id):
+    try:
+        delete_favpeople = FavPeople.query.get(id)
+        db.session.delete(delete_favpeople)
+        db.session.commit()
+        return jsonify({"msg": "OK"}), 204
+    except Exception as error:
+        db.session.rollback()
+        return jsonify({"msg": error.args[0]}), 500
+    
+# Rutas para obtener favoritos de starship
+@app.route('/favstarship', methods=['GET'])
+def get_all_favstarship():
+    all_favstarship = FavStarship.query.all()
+    favstarships_serialized = []
+    for favstarship in all_favstarship:
+        favstarships_serialized.append(favstarship.serialize())
+    print(favstarships_serialized)
+    return jsonify({"data": "all_favstarship"}), 200
+
+# Rutas para obtener favoritos de starship por ID
+@app.route("/favstarship/<int:id>", methods=['GET'])
+def get_single_favstarship(id):
+    single_favstarship = FavStarship.query.get(id)
+    if single_favstarship is None:
+        return jsonify({"msg": "La Favorito de Starship con el ID: {} no existe".format(id)}), 400
+    return jsonify({"data": single_favstarship.serialize()}), 200
+
+# Rutas para nuevos favoritos de starship
+@app.route('/favstarship', methods=["POST"])
+def new_favstarship():
+    body = request.get_json(silent=True)
+      
+    new_favstarship = FavStarship()
+    new_favstarship.user_id = body["user_id"]
+    new_favstarship.starship_id = body["starship_id"]
+    db.session.add(new_favstarship)
+    db.session.commit()
+
+    return jsonify({"msg": "OK"}), 200
+
+#Rutas para borrar favoritos de starship
+@app.route("/favstarship/<int:id>", methods=["DELETE"])
+def delete_favstarship(id):
+    try:
+        delete_favstarship = FavStarship.query.get(id)
+        db.session.delete(delete_favstarship)
+        db.session.commit()
+        return jsonify({"msg": "OK"}), 204
+    except Exception as error:
+        db.session.rollback()
+        return jsonify({"msg": error.args[0]}), 500
+    
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
